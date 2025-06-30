@@ -8,6 +8,12 @@ import { ToastContainer } from 'react-toastify';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import 'react-toastify/dist/ReactToastify.css';
 
+// 🌐 Detectar entorno local o producción
+const isLocalhost = window.location.hostname === 'localhost';
+const API_URL = isLocalhost
+  ? 'http://localhost:5000'
+  : 'https://mailing-reqk.onrender.com';
+
 const App = () => {
   const [clients, setClients] = useState([]);
   const [dropClients, setDropClients] = useState([]);
@@ -29,7 +35,7 @@ const App = () => {
     <div style={{ padding: 20, fontFamily: 'Arial, sans-serif', position: 'relative' }}>
       <h1 style={{ marginLeft: mostrarDrag ? 320 : 20 }}>📬 React Mailing App</h1>
 
-      {/* 🧲 Sidebar con scroll */}
+      {/* 🧲 Sidebar */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -51,11 +57,12 @@ const App = () => {
             onManualUpdate={setDropClients}
             onDropTransfer={handleDropTransfer}
             group={clientGroup}
+            apiUrl={API_URL}
           />
         </div>
       </div>
 
-      {/* 🔘 Botón para abrir/cerrar sidebar */}
+      {/* 🔘 Toggle sidebar */}
       <div style={{
         position: 'fixed',
         top: 20,
@@ -78,7 +85,7 @@ const App = () => {
         </button>
       </div>
 
-      {/* 🔻 Contenido principal */}
+      {/* 🔻 Main content */}
       <div style={{ marginLeft: mostrarDrag ? 320 : 20, transition: 'margin-left 0.3s ease' }}>
         <section style={{ marginBottom: 30 }}>
           <ClientManager
@@ -86,6 +93,7 @@ const App = () => {
             setGroup={setClientGroup}
             onClientsUpdate={setClients}
             filtro={filtro}
+            apiUrl={API_URL}
           />
         </section>
 
@@ -93,6 +101,7 @@ const App = () => {
           <EmailDashboard
             group={clientGroup}
             setFiltro={setFiltro}
+            apiUrl={API_URL}
           />
         </section>
 
@@ -101,6 +110,7 @@ const App = () => {
             group={templateGroup}
             setGroup={setTemplateGroup}
             onTemplateReady={setTemplate}
+            apiUrl={API_URL}
           />
         </section>
 
@@ -109,6 +119,7 @@ const App = () => {
             clients={effectiveRecipients}
             template={template}
             group={clientGroup}
+            apiUrl={API_URL}
           />
         </section>
       </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-const API_BASE = process.env.REACT_APP_API_URL;
+const API_BASE = process.env.REACT_APP_API_URL ?? 'http://localhost:5000';
 
 const ClientManager = ({ onClientsUpdate, group, setGroup, filtro }) => {
   const [clients, setClients] = useState([]);
@@ -10,6 +10,8 @@ const ClientManager = ({ onClientsUpdate, group, setGroup, filtro }) => {
   const [search, setSearch] = useState('');
   const [historiales, setHistoriales] = useState({});
   const [expandido, setExpandido] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
   const timeSince = (isoDate) => {
     if (!isoDate) return 'Nunca contactado';
@@ -28,6 +30,7 @@ const ClientManager = ({ onClientsUpdate, group, setGroup, filtro }) => {
       );
       setClients(formatted);
       onClientsUpdate(formatted);
+      setCurrentPage(1);
     } catch (err) {
       toast.error('Error al cargar clientes 😵');
       console.error(err);
@@ -103,6 +106,19 @@ const ClientManager = ({ onClientsUpdate, group, setGroup, filtro }) => {
     })
     .filter((c) => c.email.toLowerCase().includes(search.toLowerCase()));
 
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+  const paginatedClients = clientesFiltrados.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(clientesFiltrados.length / itemsPerPage);
+
+  const handlePageChange = (direction) => {
+    setCurrentPage((prev) => {
+      if (direction === 'next') return Math.min(prev + 1, totalPages);
+      if (direction === 'prev') return Math.max(prev - 1, 1);
+      return prev;
+    });
+  };
+
   return (
     <div>
       <h3>📇 Lista de Clientes: {group.replace(/_/g, ' ')}</h3>
@@ -163,7 +179,7 @@ const ClientManager = ({ onClientsUpdate, group, setGroup, filtro }) => {
       />
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-        {clientesFiltrados.map((client, idx) => (
+        {paginatedClients.map((client, idx) => (
           <div
             key={idx}
             draggable
@@ -213,20 +229,43 @@ const ClientManager = ({ onClientsUpdate, group, setGroup, filtro }) => {
                 top: 8,
                 right: 10,
                 background: 'transparent',
-                border: 'none',
-                color: 'crimson',
-                fontSize: '1.2rem',
-                cursor: 'pointer'
-              }}
-              title="Eliminar"
-            >
-              🗑️
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+                border: 'none',color: 'crimson', fontSize: '1.2rem', cursor: 'pointer' }} title="Eliminar" > 🗑️ </button> </div> ))} </div>
+  {/* ⬅➡ Controles de paginación */}
+  {totalPages > 1 && (
+    <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center', gap: 10 }}>
+      <button
+        onClick={() => handlePageChange('prev')}
+        disabled={currentPage === 1}
+        style={{
+          padding: '6px 12px',
+          borderRadius: 4,
+          border: '1px solid #ccc',
+          backgroundColor: currentPage === 1 ? '#e9e9e9' : '#fff',
+          cursor: currentPage === 1 ? 'not-allowed' : 'pointer'
+        }}
+      >
+        ◀ Anterior
+      </button>
 
+      <span style={{ alignSelf: 'center', fontSize: '0.9rem' }}>
+        Página {currentPage} de {totalPages}
+      </span>
+
+      <button
+        onClick={() => handlePageChange('next')}
+        disabled={currentPage === totalPages}
+        style={{
+          padding: '6px 12px',
+          borderRadius: 4,
+          border: '1px solid #ccc',
+          backgroundColor: currentPage === totalPages ? '#e9e9e9' : '#fff',
+          cursor: currentPage === totalPages ? 'not-allowed' : 'pointer'
+        }}
+      >
+        Siguiente ▶
+      </button>
+    </div>
+  )}
+</div>); 
+};
 export default ClientManager;

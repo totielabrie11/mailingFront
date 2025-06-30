@@ -3,7 +3,8 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import './EmailTemplateEditor.css';
 
-const API_BASE = process.env.REACT_APP_API_URL;
+// 🧩 Fallback automático a localhost
+const API_BASE = process.env.REACT_APP_API_URL ?? 'http://localhost:5000';
 
 const EmailTemplateEditor = ({ onTemplateReady, group, setGroup }) => {
   const [text, setText] = useState("");
