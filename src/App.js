@@ -6,6 +6,9 @@ import EmailSender from './components/EmailSender';
 import EmailDashboard from './components/EmailDashboard';
 import { ToastContainer } from 'react-toastify';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import CalendarView from './components/CalendarView';
+
+
 import 'react-toastify/dist/ReactToastify.css';
 
 // 🌐 Detectar entorno local o producción
@@ -122,6 +125,11 @@ const App = () => {
             apiUrl={API_URL}
           />
         </section>
+
+        <section style={{ marginBottom: 30 }}>
+          <CalendarView />
+        </section>
+
       </div>
 
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop />
