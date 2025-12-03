@@ -174,6 +174,7 @@ const EmailDashboard = ({ group, setFiltro }) => {
           ))}
         </div>
       </div>
+
     </div>
   );
 };

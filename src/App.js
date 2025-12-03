@@ -6,7 +6,6 @@ import EmailSender from './components/EmailSender';
 import EmailDashboard from './components/EmailDashboard';
 import { ToastContainer } from 'react-toastify';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import CalendarView from './components/CalendarView';
 
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -126,9 +125,6 @@ const App = () => {
           />
         </section>
 
-        <section style={{ marginBottom: 30 }}>
-          <CalendarView />
-        </section>
 
       </div>
 

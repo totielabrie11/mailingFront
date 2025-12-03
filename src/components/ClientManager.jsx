@@ -229,7 +229,12 @@ const ClientManager = ({ onClientsUpdate, group, setGroup, filtro }) => {
                 top: 8,
                 right: 10,
                 background: 'transparent',
-                border: 'none',color: 'crimson', fontSize: '1.2rem', cursor: 'pointer' }} title="Eliminar" > 🗑️ </button> </div> ))} </div>
+                border: 'none',color: 'crimson', 
+                fontSize: '1.2rem', 
+                cursor: 'pointer' }} 
+                title="Eliminar" > 
+          🗑️ </button> 
+          </div> ))} </div>
   {/* ⬅➡ Controles de paginación */}
   {totalPages > 1 && (
     <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center', gap: 10 }}>
